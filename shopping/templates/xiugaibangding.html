@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>绑定邮箱</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/vipcenter.css">
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/jquery.min_sign.js"></script>
+</head>
+
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="#" onclick="location.href='index?name={{ name }}'">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <li><a href="#" onclick="location.href='vip'">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="#">登录<br/>登录</a></li>
+                <li><a href="#">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/phone.png"/>
+         </div>
+    </div>
+</div>
+<!--个人中心首页 -->
+<div class="thetoubu">
+	<!--头部-->
+	<div class="thetoubu1">
+    	<b>
+        	<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1781615267,834481015&fm=27&gp=0.jpg"/>
+        </b>
+        <em>{{ name }}</em>
+        <em>欢迎来到会员中心</em>
+        <a href="#" onclick="location.href='vip_amend'">修改资料</a>
+        <h5>账户安全</h5>
+        {% if pwd > 10 %}
+            <strong>高</strong>
+            <span>
+                <p style=" width:80%"></p>
+            </span>
+        {% elif pwd < 10 and pwd > 6 %}
+            <strong>中</strong>
+            <span>
+                <p style=" width:50%"></p>
+            </span>
+        {% else %}
+            <strong>低</strong>
+            <span>
+                <p style=" width:30%"></p>
+            </span>
+        {% endif %}
+        <a href="#" onclick="location.href='secure'">安全等级提升</a>
+    </div>
+    <!--详细列表-->
+    <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="liefyu">
+        	<h2>交易管理</h2>
+                <div class="conb">
+                <a href="#" onclick="location.href='cart'">我的购物车</a>
+                <a href="#" onclick="location.href='shop_cang'">我的收藏</a>
+                <a href="#">交易评价/晒单</a>
+                </div>
+            <h2>客户服务</h2>
+                <div class="conb">
+                <a href="#">退款及退货</a>
+                <a href="#">交易投诉</a>
+                <a href="#">商品咨询</a>
+                </div>
+            <h2>资料管理</h2>
+                <div class="conb">
+                <a href="#">账户信息</a>
+                <a href="#" onclick="location.href='secure'">账户安全</a>
+                </div>
+        </div>
+        <script type="text/javascript">
+            $(function(){//第一步都得写这个
+                $(".liefyu h2").click(function(){//获取title，并且让他执行下面的函数
+                $(this)/*点哪个就是哪个*/.next(".conb")/*哪个标题下面的con*/.slideToggle()/*打开/折叠*/.siblings/*锁定同级元素*/(".con").slideUp()/*同级元素折叠起来*/
+                })
+            });
+            function test(email){
+                //对电子邮件的验证
+                var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if(!myreg.test(email)){
+                    alert('请输入有效的E_mail！');
+                    myreg.focus();
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            var rand = 0;
+            var countdown = 60;
+            function settime(obj) { //发送验证码倒计时
+				if(countdown == 0) {
+					obj.attr('disabled', false);
+					//obj.removeattr("disabled");
+					obj.val("免费获取验证码");
+					countdown = 60;
+					return;
+				} else {
+				    //让某个节点禁用（包括事件等）
+					obj.attr('disabled', true);
+					obj.val("重新发送(" + countdown + ")");
+					countdown--;
+				}
+				setTimeout(function() {
+					settime(obj)
+				}, 1000)
+			}
+            function send() {
+                var mail = document.getElementById("mail").value;
+                var flag = test(mail);
+                settime($("#btn"));
+                if(flag){
+                    $.ajax({
+                        type:"POST",
+                        dataType:"json",
+                        url:"send",
+                        data:{"mail":mail},
+                        success:function (data) {
+                            //把返回的值赋值给rand
+                            rand = data.rand;
+                        },
+                        error:function(){
+                            alert("异常");
+                        }
+                    });
+                }
+            }
+            function yanz() {
+                var flag = true;
+                var new_mail = document.getElementById("mail").value;
+                var aa = document.getElementById("rand").value;
+                if(new_mail==""){
+                    flag = false;
+                    alert("邮箱不能为空！");
+                }
+                if(flag){
+                    if(aa==rand){
+                        alert("邮箱绑定成功！");
+                        location.href="send1?mail="+new_mail
+                    }else{
+                        alert("验证码错误！");
+                    }
+                }
+            }
+		</script>
+        <!--right-->
+        <div class="zuirifip">
+        	<!--账户安全之手机绑定-->
+            <div class="basedexinxi">
+            	<a href="#">邮箱绑定</a>
+            </div>
+            <!--绑定手机开始-->
+            <div class="bdsjksla">
+            <h5 style=" display:block; float:left; line-height:40px; font-size:20px; color:#666; margin-left:10px">操作提示</h5>
+                <div class="thetwobf">
+                    <em>绑定的邮箱地址：</em>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" type="text" name="mail" class="shuru" id="mail"/>
+                    <input type="button" id="btn" style=" display:block; padding-left:12px; padding-right:12px; line-height:26px; font-size:14px; color:#666; float:left; margin-left:6px; background:#f5f5f5; border:1px solid #bbb" onclick="send()" value="获取邮箱验证码">
+                </div>
+                <div class="thetwobf">
+                	<em>请输入验证码：</em><input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" id="rand" type="text" class="shuru"/>
+                </div>
+                <div class="thetwobf">
+                    <a href="#" style=" display:block; padding-left:20px; padding-right:20px; line-height:40px;float:left; font-size:14px; color:#FFF; margin-left:213px" onclick="yanz()">立即绑定</a>
+                </div>
+            </div>
+        </div>
+        <!--right结束-->
+    </div>
+    <!--详细列表结束-->
+</div>
+<!--个人中心结束-->
+</body>
+</html>
+      
+                

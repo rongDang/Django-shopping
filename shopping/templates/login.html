@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>登录页面</title>
+<meta name="author" content="DeathGhost" />
+<link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+<style>
+body{height:100%;background:#16a085;overflow:hidden;}
+canvas{z-index:-1;position:absolute;}
+</style>
+<script src="../static/js/jquery-1.8.3.min.js"></script>
+<script src="../static/js/yanzhengma.js"></script>
+<script src="../static/js/Particleground.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+      //粒子背景特效
+      $('body').particleground({
+        dotColor: '#5cbdaa',
+        lineColor: '#5cbdaa'
+      });
+      //验证码
+      createCode();
+      //测试提交，对接程序删除即可
+      });
+</script>
+</head>
+<body>
+    <form id="form1" method="post" action="">
+        <!--表单的形式获取-->
+        {% csrf_token %}
+        <dl class="admin_login">
+            <dt>
+                <strong>欢迎登录小白商城</strong>
+                <em>The small white mall</em>
+            </dt>
+            <dd class="user_icon">
+                <!--用手机或邮箱登录，到用户表查询-->
+                <input type="text" id="name" name="name" placeholder="手机号/邮箱" class="login_txtbx"/>
+            </dd>
+            <dd class="pwd_icon">
+                <input type="password" id="pwd" name="pwd" placeholder="密码" class="login_txtbx"/>
+            </dd>
+            <dd class="val_icon">
+                <div class="checkcode">
+                    <input type="text" id="J_codetext" placeholder="验证码" maxlength="4" class="login_txtbx">
+                    <!--Canvas是HTML5新增的组件，它就像一块幕布，可以用JavaScript在上面绘制各种图表、动画等。-->
+                    <!--在这里点击验证码就会调用 随机验证码的函数-->
+                    <canvas class="J_codeimg" id="myCanvas" onclick="createCode()">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+                </div>
+                <input type="button" value="验证码核验" class="ver_btn" onClick="validate();">
+            </dd>
+            <dd>
+                <input type="button" value="立即登陆" class="submit_btn" onclick="validate();"/>
+            </dd>
+            <dd>
+                <p>© 2015-2016 DeathGhost 版权所有</p>
+                <p>www.xiaobai.com</p>
+            </dd>
+        </dl>
+    </form>
+</body>
+</html>

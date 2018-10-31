@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>填写核对购物信息</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/shangpingoumai.css">
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/city.js/cityJson.js"></script>
+    <script src="../static/js/city.js/citySet.js"></script>
+    <script src="../static/js/city.js/Popt.js"></script>
+</head>
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="#" onclick="location.href='index'">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <li><a href="#" onclick="location.href='vip?name='+'{{ name }}'">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="#">登录<br/>登录</a></li>
+                <li><a href="#">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/phone.png"/>
+         </div>
+    </div>
+</div>
+<!--全部开始-->
+<div class="tianxiehedui">
+	<!--标题-->
+	<div class="rzhdndgw">温馨提示：请认真核对您的购物信息</div>
+    <!--收货人信息-->
+    <div class="shouhurxl clastyo">
+    	<div class="shouhurxl1">
+        	<em>收货人信息</em>
+            <a href="#" class="chgeb">修改</a>
+        </div>
+        <!--这里显示你最初的地址-->
+        <div class="shouhurxl2">
+        	<span>王莉</span>
+            <span>山东省	济南市	天桥区历山北路黄台电子商务产业园1020</span>
+            <span><em>电话：</em><em>15554465535</em></span>
+        </div>
+    </div>
+    <!--点击修改会出现这个选择框-->
+    <div class="changepc">
+    	<!--以前的旧地址-->
+    	<div class="tongyongdizhi">
+        	<input type="radio" name="adressa" style=" float:left; display:block; width:13px; height:13px; margin-top:9px">
+            <span>王莉</span>
+            <span>山东省	济南市	天桥区历山北路黄台电子商务产业园1020</span>
+            <span><em>电话：</em><em>15554465535</em></span>
+            <a href="#">删除</a>
+        </div>
+        <!--添加新地址-->
+        <div class="dandudizhi">
+        	<input type="radio" name="adressa" class="adressa" style=" float:left; display:block; width:13px; height:13px; margin-top:9px">
+            <span>使用新地址</span>
+        </div>   
+        <!--添加新地址-->
+            <div class="opcaty1">
+            	<div class="opcaty2">
+                	<em>收货人姓名：</em>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" type="text" class="shuru"/>
+                </div>
+                <div class="opcaty2">
+                	<em>所在的地区：</em>
+                    <input type="text" id="city" value="点击选择地区" style=" height:28px; font-size:12px; border:1px solid #bbb; float:left">
+                    <script type="text/javascript">
+						$("#city").click(function (e) {
+						SelCity(this,e);
+						});
+					</script>
+                </div>
+                <div class="opcaty2">
+                	<em>详细的地址：</em>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px; width:488px" type="text" class="shuru" placeholder="请填写真实地址，不需要重复填写所在地区" required />
+                </div>
+                <div class="opcaty2">
+                	<em>联系的电话：</em>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" type="text" class="shuru"/>
+                </div>
+                <a href="#" class="bcshrxopl">保存收货人信息</a>
+            </div>
+        <!--新地址结束-->
+        <!--添加新地址结束-->
+    </div>
+    <script>
+	$(function(){
+		$(".chgeb").click(function(){
+			$(".changepc").css({display:"block"});
+			$(".clastyo").css({display:"none"})
+			})
+		$(".bcshrxopl").click(function(){
+			$(".changepc").css({display:"none"});
+			$(".clastyo").css({display:"block"});
+			$(".opcaty1").css({display:"none"})
+			})
+		$(".adressa").click(function(){
+			$(".opcaty1").css({display:"block"})
+			})		
+		})
+    </script>
+    <!--这个选择框结束-->
+    <!--收货人信息结束-->
+    <!--支付方式-->
+    <div class="shouhurxl">
+    	<h3>支付方式</h3>
+        <div class="zhifufangsj1">
+        	<span>在线支付</span>
+        </div>
+    </div>
+    <!--支付方式结束-->
+    <!--发票信息-->
+    <div class="shouhurxl shouhurxl13">
+    	<div class="shouhurxl1 shouhurxl12">
+        	<em>发票信息</em>
+            <a href="#">修改</a>
+        </div>
+        <div class="shouhurxl2">
+        	<span>普通发票</span>
+        </div>
+        <script>
+		$(function(){
+			$(".shouhurxl12 a").click(function(){
+				$(".shouhurxl13").css({display:"none"});
+				$(".xgfpxo").css({display:"block"});
+				$(".fapiaowr3").css({display:"none"})
+				});
+			$(".godieba").click(function(){
+				$(".fapiaowr3").css({display:"block"})
+				});
+			$(".worilrgo").click(function(){
+				$(".xgfpxo").css({display:"none"});
+				$(".shouhurxl13").css({display:"block"})
+				})
+			})
+        </script>
+    </div>
+    <!--修改发票信息-->
+    <div class="xgfpxo">
+    	<div class="fapiaowr">
+        	<span>发票信息</span>
+        </div>
+        <!--众多发票的信息-->
+        <div class="fapiaowr fapiaowr1">
+        	<input type="radio" name="fapl" style=" float:left; display:block; width:13px; height:13px; margin-top:9px"><span>普通发票</span>
+            <a href="#">删除</a>
+        </div>
+        <!--发票结束-->
+        <!--使用新的发票信息-->
+        <div class="fapiaowr fapiaowr1">
+        	<input type="radio" name="fapl" style=" float:left; display:block; width:13px; height:13px; margin-top:9px" class="godieba"><span>使用新的发票信息</span>
+            <!--点击后这个块又出现-->
+            <div class="fapiaowr fapiaowr3">
+            	<div class="fapiaowr">
+                	<em style=" float:left; font-size:14px; display:block; color:#333; line-height:30px">发票类型：</em>
+                    <input type="radio" name="fapla" checked style=" float:left; display:block; width:13px; height:13px; margin-top:8px">
+                    <span style=" display:block; float:left; padding-left:6px; line-height:30px; font-size:14px; color:#333">普通发票</span>
+                </div>
+                <div class="fapiaowr">
+                	<em style=" float:left; font-size:14px; display:block; color:#333; line-height:30px">发票抬头：</em>
+                    <select style=" float:left; display:block; width:100px; border:1px solid #bbb; height:28px">
+                        <option value="person">个人</option>
+                        <option value="company">单位</option>
+            		</select>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:26px; font-size:12px; text-indent:6px; width:160px; margin-left:6px" type="text" class="shuru" placeholder="单位名称" required />
+                </div>
+                <div class="fapiaowr">
+                	<em style=" float:left; font-size:14px; display:block; color:#333; line-height:30px">发票内容：</em>
+                    <select style=" float:left; display:block; width:100px; border:1px solid #bbb; height:28px">
+                        <option value="person">明细</option>
+                        <option value="company">酒</option>
+                        <option value="company">玩具</option>
+                        <option value="company">汽车</option>
+                        <option value="company">家电</option>
+            		</select>
+                </div>
+            </div>
+            <div style=" width:100%; height:auto ; overflow:hidden">
+            <a href="#" style=" display:block; padding-left:20px; padding-right:20px; line-height:40px; color:#fff; font-size:14px; margin-top:10px; margin-bottom:10px" class="worilrgo bcfpxxnm" >保存发票信息</a>
+                 <a href="#" style=" display:block; padding-left:20px; padding-right:20px; line-height:40px; color:#fff; font-size:14px; margin-top:10px; margin-bottom:10px; margin-left:10px" class="worilrgo byynm">不需要发票</a>
+             </div>    
+            <!--这个块结束-->
+        </div>
+    </div>
+    <!--发票信息结束-->
+    <!--商品清单-->
+    <div class="shouhurxl">
+    	<!--一条商品信息开始-->
+    	<div class="xxpop1" style="background:rgba(255,153,0,0.1); padding-bottom:6px">
+        	<div class="xxpop2">
+                <span>店铺</span>
+                <a href="#" onclick="location.href='store?store_name='+'{{ store }}'"><p>{{ store }}</p></a>
+            </div>
+            <div class="xxpop2" style=" width:630px">
+                <span>商品</span>
+                <a href="#" onclick="location.href='Xiangq?id='+{{ id }}">
+                    <p style=" line-height:20px">
+                        <img src="{{ img }}"/>&nbsp;
+                        {{ title }}
+                    </p>
+                </a>
+            </div>
+            <div class="xxpop2">
+                <span>单价(元)</span>
+                <p>{{ price }}</p>
+            </div>
+            <div class="xxpop2">
+                <span>数量</span>
+                <p>{{ number }}</p>
+            </div>
+            <div class="xxpop2">
+                <span>小计(元)</span>
+                <p>{{ prices }}</p>
+            </div>
+        </div>
+        <!--买家留言-->
+        <div class="maijiayouhuayue">
+        	<em style=" width:90px; text-align:right">买家留言：</em>
+            <textarea style=" line-height:20px; font-size:14px; color:#111; border:1px solid #bbb; width:1000px; box-shadow:none" placeholder="选填：对本次交易的说明（建议填写已经和商家达成一致的说明）"></textarea>
+        </div>
+        <div class="ddzjes">
+            <em>订单总金额：</em>
+            <em style=" padding-left:0"><s>{{ prices }}</s>元</em>
+        </div>
+        <!--支付密码结束-->
+      </div>
+        <!--一条商品信息结束-->
+    <a href="#" class="tijiaodingdang56" onclick="location.href='https://openapi.alipaydev.com/gateway.do?app_id=2016091500516489&biz_content=%7B%22subject%22%3A%22%5Cu3010%5Cu5230%5Cu624b8088%5Cu8d77%5Cu3011Apple%2F%5Cu82f9%5Cu679ciPhone+X+%5Cu5168%5Cu7f51%5Cu901a4G%5Cu624b%5Cu673a+%5Cu82f9%5Cu679c10+%5Cu82f9%5Cu679cX%22%2C%22out_trade_no%22%3A%22201805052791%22%2C%22total_amount%22%3A8288%2C%22product_code%22%3A%22FAST_INSTANT_TRADE_PAY%22%7D&charset=utf-8&method=alipay.trade.page.pay&notify_url=http%3A%2F%2Fprojectsedus.com%2F&return_url=http%3A%2F%2F127.0.0.1%3A8000%2Findex&sign_type=RSA2&timestamp=2018-05-07+13%3A44%3A56&version=1.0&sign=g2p91hUeBnF7H95koBYobxX6%2BGjX8xHJ4tlyq%2BMIb2rlHQM89REPtBb%2FC1vYoKR7wdMtts4vGq6khevpmKepAe8%2FAoK1K%2B2pKrdEkm719vUwaw0IAXH8wqtMldhI6hNgcuMkhWQPl%2BDWpOwNR8vNHPVMmTjI%2Fr2NVJpWOA7pj%2BdMwWEhEgWsK3%2BD3akYwYkotPstW9CVzb%2F97I7pJfZKsSli6R1OB%2BEtBITCExQcYimRiuHSlBQdNiAoUsggo7tV%2BSz3hYUY9wF7cGYNpvXnYoYV6MDNfD7iV0jNeBexYjFY2bL9DxmjZ%2BCXWbahTU02NjrLVhkwkmpftc2v9Pb%2BmQ%3D%3D'">提交订单</a>
+    </div>
+    <!--商品清单结束-->
+</body>
+</html>    
+                     
+           
+            
+                
+                    
+            
+                
+        
+            
+        
+

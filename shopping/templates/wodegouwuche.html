@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>我的购物车</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/vipcenter.css">
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/public.js"></script>
+</head>
+
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="#" onclick="location.href='index?name={{ name }}'">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <li><a href="#" onclick="location.href='vip'">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="#">登录<br/>登录</a></li>
+                <li><a href="#">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/phone.png"/>
+         </div>
+    </div>
+</div>
+<!--个人中心首页 -->
+<div class="thetoubu">
+	<!--头部-->
+	<div class="thetoubu1">
+    	<b>
+        	<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1781615267,834481015&fm=27&gp=0.jpg"/>
+        </b>
+        <em>{{ name }}</em>
+        <em>欢迎来到会员中心</em>
+        <a href="#" onclick="location.href='vip_amend'">修改资料</a>
+        <h5>账户安全</h5>
+        {% if pwd > 10 %}
+            <strong>高</strong>
+            <span>
+                <p style=" width:80%"></p>
+            </span>
+        {% elif pwd < 10 and pwd > 6 %}
+            <strong>中</strong>
+            <span>
+                <p style=" width:50%"></p>
+            </span>
+        {% else %}
+            <strong>低</strong>
+            <span>
+                <p style=" width:30%"></p>
+            </span>
+        {% endif %}
+        <a href="#" onclick="location.href='secure'">安全等级提升</a>
+    </div>
+    <!--详细列表-->
+    <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="liefyu">
+        	<h2>交易管理</h2>
+                <div class="conb">
+                <a href="#">我的购物车</a>
+                <a href="#" onclick="location.href='shop_cang'">我的收藏</a>
+                <a href="#">交易评价/晒单</a>
+                </div>
+            <h2>客户服务</h2>
+                <div class="conb">
+                <a href="#">退款及退货</a>
+                <a href="#">交易投诉</a>
+                <a href="#">商品咨询</a>
+                </div>
+            <h2>资料管理</h2>
+                <div class="conb">
+                <a href="#">账户信息</a>
+                <a href="#" onclick="location.href='secure'">账户安全</a>
+                </div>
+        </div>
+        <script type="text/javascript">
+		$(function(){//第一步都得写这个
+			$(".liefyu h2").click(function(){//获取title，并且让他执行下面的函数
+			$(this)/*点哪个就是哪个*/.next(".conb")/*哪个标题下面的con*/.slideToggle()/*打开/折叠*/.siblings/*锁定同级元素*/(".con").slideUp()/*同级元素折叠起来*/
+			})
+		})
+		</script>
+        <!--right-->
+        <div class="zuirifip">
+        <!--lll-->
+        	<div class="zuiriftp1">
+            	<ul>
+                	<li>
+                        <span>账户余额</span>
+                        <p>￥1000</p>
+                    </li>
+                    <li>
+                    	<span>我的积分</span>
+                        <p>1000</p>
+                    </li>
+                    <li>
+                    	<span>我的优惠劵</span>
+                        <p><s>2</s>张</p>
+                    </li>
+                </ul>
+            </div>
+        <!--lll-->
+        	<div class="dfdaspjtk">
+                <!--点击显示不同状态的订单-->
+            	<span style=" display:block; float:left; font-size:14px; font-weight:bold; line-height:34px; padding-left:20px; padding-right:20px; color:#666">交易提醒</span>
+                <a href="#" style="color:#09f">交易历史&nbsp;<s></s></a>
+                <a href="#" >待付款&nbsp;<s></s></a>
+                <a href="#">待收货&nbsp;<s></s></a>
+                <a href="#">待评价&nbsp;<s></s></a>
+            </div>
+            <script type="text/javascript">
+                $(function(){
+                    $(".dfdaspjtk a").click(function(){
+                        $(this).css({color:"#09f"}).siblings().css({color:"#333"})
+                    })
+                });
+                function del(state,shop_id,id) {
+                    var flag = confirm("确认删除此订单？");
+                    if (state == "1"){
+                        alert("订单正在交易中，无法删除");
+                        flag = false;
+                    }else if(flag){
+                        $.ajax({
+                            type:"get",
+                            dataType:"json",
+                            url:"Dcart?shop_id="+shop_id+"&id="+id,
+                            success:function (data) {
+                                //删除成功后再返回此页面
+                                location.href="cart"
+                            },
+                            error:function(){
+                                alert("异常");
+                            }
+                        });
+                    }
+                }
+                //取消订单
+                function quxiao(id) {
+                    var flag = confirm("确认取消此订单？");
+                    if(flag){
+                        $.ajax({
+                            type:"get",
+                            dataType:"json",
+                            url:"update_cart?id="+id,
+                            success:function (data) {
+                                //删除成功后再返回此页面
+                                location.href="cart"
+                            },
+                            error:function(){
+                                alert("异常");
+                            }
+                        });
+                    }
+                }
+                //支付订单,获取id来操作
+                function alipay(id) {
+                    $.ajax({
+                        type:"get",
+                        dataType:"json",
+                        url:"update_cart1?id="+id,
+                        success:function (data) {
+                            //删除成功后再返回此页面
+                            location.href='https://openapi.alipaydev.com/gateway.do?app_id=2016091500516489&biz_content=%7B%22subject%22%3A%22%5Cu3010%5Cu5230%5Cu624b8088%5Cu8d77%5Cu3011Apple%2F%5Cu82f9%5Cu679ciPhone+X+%5Cu5168%5Cu7f51%5Cu901a4G%5Cu624b%5Cu673a+%5Cu82f9%5Cu679c10+%5Cu82f9%5Cu679cX%22%2C%22out_trade_no%22%3A%22201805056398%22%2C%22total_amount%22%3A8288%2C%22product_code%22%3A%22FAST_INSTANT_TRADE_PAY%22%7D&charset=utf-8&method=alipay.trade.page.pay&notify_url=http%3A%2F%2Fprojectsedus.com%2F&return_url=http%3A%2F%2F127.0.0.1%3A8000%2Findex&sign_type=RSA2&timestamp=2018-05-07+14%3A06%3A13&version=1.0&sign=attUqcifiiKeStsYClU0scw05F1PHcdcThkJ0Spynk1K4X5HTY%2BiDKjlylKI5%2F9vfVIiM1mYfyjYiyEKITtdmAOEEvejFfeCjXxYCAQbhKDt%2BSSCl%2F%2BJeCxPv%2B8Qv2OtAHGtWe9AKf72FursGzhXYERC%2Fb0bnEwPFvbAeh058Yv3HyQu9aa0Ux5kcBJFoBLrIeRFphf8cgfmUnEyJxVkIVsKqh1m7D5WHk0PvCr0rAp%2FEiyy%2F0twSwPG5yycMB7ZCv5AkQfpE1IM1Ft1qINVhq%2Bd8QMSc6MQWSeAbtmiQpIHbccPcXbyrFlvawoORTgeP%2BuDjcmhAcMy5Kfe0JSjlg%3D%3D'
+                        },
+                        error:function(){
+                            alert("异常");
+                        }
+                    });
+                }
+            </script>
+        <!--所有列表-->
+        <!--用户支付订单使用js来设置一个弹出框，让用户输入密码，ajax实现如果密码正确或错误-->
+            {% for foo in shuju %}
+                <div class="sydlbdzz">
+                    <!--一个列表开始-->
+                    <div class="gzdlbdzzl">
+                        <!--左-->
+                        <div class="spzhaopin">
+                            <a href="#" onclick="location.href='Xiangq?id='+'{{ foo.1 }}'"><img src="{{ foo.3 }}"/></a>
+                        </div>
+                        <!--中-->
+                        <div class="youstdongi">
+                            <h5><a href="#" onclick="location.href='Xiangq?id='+'{{ foo.1 }}'"  style=" color:#333;">{{ foo.4 }}</a>&nbsp;&nbsp;&nbsp;<a href="#" style="color:#333">我要咨询</a></h5>
+                            <span>下单时间：{{ foo.6 }}&nbsp;</span>
+                        <!--0表示没有支付，1表示已经支付，-1表示已经取消订单了-->
+                            {% if foo.9 == "0" %}
+                                <!--没有支付-->
+                                <span style=" color:#f00">订单状态：待付款</span>
+                            {% elif foo.9 == "1" %}
+                                <!--已支付-->
+                                <span style=" color:#09f">订单状态：待收货</span>
+                            {% else %}
+                                <!--已经取消订单-->
+                                <span style=" color:#999">订单状态：已取消</span>
+                            {% endif %}
+                            <span>订单金额：<s style="color:#f00; font-weight:bold; font-size:14px">￥{{ foo.7 }}</s>
+                            <s style="color:#666; margin-left:10px">({{ foo.8 }})件</s>
+                            <s style="color:#666; margin-left:10px">免运费</s>
+                            <s style="color:#666; margin-left:10px">在线支付</s>
+                            <a href="#" onclick="location.href='store?store_name='+'{{ foo.5 }}'" style="margin-left:10px">{{ foo.5 }}</a>
+                            {% if foo.9 == "0" %}
+                                 <!--点击取消则改变订单状态-->
+                                <a href="#" style="margin-left:10px" onclick="quxiao('{{ foo.1 }}')">取消订单</a>
+                            {% elif foo.9 == "1" %}
+                                <a href="#" style="margin-left:10px">退款退货</a>
+                            {% else %}
+                                <a href="#" style="margin-left:10px"></a>
+                            {% endif %}
+                            <!--点击删除则删除购物车表中该用户和对应商品id的商品-->
+                            <a href="#" style="color:#F00; cursor:pointer; float:right" onclick="del('{{ foo.9 }}','{{ foo.1 }}',{{ foo.0 }})">删除</a></span>
+                        </div>
+                        <!--右-->
+                        <div class="quzhifubasb">
+                            {% if foo.9 == "0" %}
+                                <a href="#" onclick="alipay('{{ foo.1 }}')">支付订单</a>
+                            {% elif foo.9 == "1" %}
+                                <a href="#">确认收货</a>
+                            {% else %}
+                                <!--状态为-1则只能查看详情-->
+                                <a href="#">查看详情</a>
+                            {% endif %}
+                        </div>
+                        <!--右下-->
+                        <div class="chakanxiangqingfg">
+                            {% if foo.9 == "-1" %}
+                            {% else %}
+                                <a href="#">查看详情</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!--一个列表结束-->
+                </div>
+            {% endfor %}
+    </div>
+    <!--详细列表结束-->
+</div>
+<!--个人中心结束-->
+</body>
+</html>

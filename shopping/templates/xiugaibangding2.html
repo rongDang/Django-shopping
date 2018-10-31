@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>修改密码</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/vipcenter.css">
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/jquery.min_sign.js"></script>
+</head>
+
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="#" onclick="location.href='index?name={{ name }}'">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <li><a href="#" onclick="location.href='vip'">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="#">登录<br/>登录</a></li>
+                <li><a href="#">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/phone.png"/>
+         </div>
+    </div>
+</div>
+<!--个人中心首页 -->
+<div class="thetoubu">
+	<!--头部-->
+	<div class="thetoubu1">
+    	<b>
+        	<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1781615267,834481015&fm=27&gp=0.jpg"/>
+        </b>
+        <em>{{ name }}</em>
+        <em>欢迎来到会员中心</em>
+        <a href="#" onclick="location.href='vip_amend'">修改资料</a>
+        <h5>账户安全</h5>
+        {% if pwd > 10 %}
+            <strong>高</strong>
+            <span>
+                <p style=" width:80%"></p>
+            </span>
+        {% elif pwd < 10 and pwd > 6 %}
+            <strong>中</strong>
+            <span>
+                <p style=" width:50%"></p>
+            </span>
+        {% else %}
+            <strong>低</strong>
+            <span>
+                <p style=" width:30%"></p>
+            </span>
+        {% endif %}
+        <a href="#" onclick="location.href='secure'">安全等级提升</a>
+    </div>
+    <!--详细列表-->
+    <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="liefyu">
+        	<h2>交易管理</h2>
+                <div class="conb">
+                <a href="#" onclick="location.href='cart'">我的购物车</a>
+                <a href="#" onclick="location.href='shop_cang'">我的收藏</a>
+                <a href="#">交易评价/晒单</a>
+                </div>
+            <h2>客户服务</h2>
+                <div class="conb">
+                <a href="#">退款及退货</a>
+                <a href="#">交易投诉</a>
+                <a href="#">商品咨询</a>
+                </div>
+            <h2>资料管理</h2>
+                <div class="conb">
+                <a href="#">账户信息</a>
+                <a href="#" onclick="location.href='secure'">账户安全</a>
+                </div>
+        </div>
+        <script type="text/javascript">
+            function send() {
+                var phone = document.getElementById("phone").value;
+                var flag = isPoneAvailable(phone);
+                settime($("#btn"));
+                // {"mail":mail}是post传过去的数据
+                if(flag){
+                    $.ajax({
+                        type:"POST",
+                        dataType:"json",
+                        url:"send_phone",
+                        data:{"phone":phone},
+                        success:function (data) {
+                            //把返回的值赋值给rand
+                            rand = data.rand;
+                        },
+                        error:function(){
+                            alert("异常");
+                        }
+                    });
+                }
+            }
+            function yanz() {
+                var new_pwd = document.getElementById("pwd").value;
+                var pwd = document.getElementById("pwd1").value;
+                if (new_pwd.length<6){
+                    alert("密码低于6位数")
+                }
+                if(new_pwd==pwd){
+                    $.ajax({
+                        type:"POST",
+                        dataType:"json",
+                        url:"send3",
+                        data:{"new_pwd":new_pwd},
+                        success:function (data) {
+                            alert("密码修改成功！");
+                            location.href="secure"
+                        },
+                        error:function(){
+                            alert("异常");
+                        }
+                    });
+                }else{
+                    alert("两次密码不相同");
+                }
+            }
+		</script>
+        <!--right-->
+        <div class="zuirifip">
+        	<!--账户安全之手机绑定-->
+            <div class="basedexinxi">
+            	<a href="#">密码修改</a>
+            </div>
+            <!--绑定手机开始-->
+            <div class="bdsjksla">
+            <h5 style=" display:block; float:left; line-height:40px; font-size:20px; color:#666; margin-left:10px">操作提示</h5>
+                <div class="thetwobf">
+                    <em>输入新密码：</em>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" type="password" name="pwd" class="shuru" id="pwd"/>
+                </div>
+                <div class="thetwobf">
+                	<em>确认密码：</em><input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" id="pwd1" type="password" class="shuru"/>
+                </div>
+                <div class="thetwobf">
+                    <a href="#" style=" display:block; padding-left:20px; padding-right:20px; line-height:40px;float:left; font-size:14px; color:#FFF; margin-left:213px" onclick="yanz()">立即修改</a>
+                </div>
+            </div>
+        </div>
+        <!--right结束-->
+    </div>
+    <!--详细列表结束-->
+</div>
+<!--个人中心结束-->
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+    <title>我收藏的店铺</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/vipcenter.css">
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/public.js"></script>
+</head>
+<script type="text/javascript">
+    //删除所有店铺
+    function del_all() {
+        var flag = confirm("确定删除所有收藏？");
+        if (flag){
+            $.ajax({
+                type:"get",
+                dataType:"json",
+                url:"Del_all_store",
+                success:function (data) {
+                    //删除成功后再返回此页面
+                    location.href="store_cang"
+                },
+                error:function(){
+                    alert("异常");
+                }
+            });
+        }
+    }
+    function del(store) {
+        //删除指定店铺
+        var flag = confirm("确认删除此收藏？");
+        if (flag){
+            $.ajax({
+                type:"get",
+                dataType:"json",
+                url:"Dstore?store="+store,
+                success:function (data) {
+                    //删除成功后再返回此页面
+                    location.href="store_cang"
+                },
+                error:function(){
+                    alert("异常");
+                }
+            });
+        }
+    }
+</script>
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="#" onclick="location.href='index?name={{ name }}'">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <li><a href="#" onclick="location.href='vip'">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="#">登录<br/>登录</a></li>
+                <li><a href="#">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/phone.png"/>
+         </div>
+    </div>
+</div>
+<!--个人中心首页 -->
+<div class="thetoubu">
+	<!--头部-->
+	<div class="thetoubu1">
+    	<b>
+        	<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1781615267,834481015&fm=27&gp=0.jpg"/>
+        </b>
+        <em>{{ name }}</em>
+        <em>欢迎来到会员中心</em>
+        <a href="#" onclick="location.href='vip_amend'">修改资料</a>
+        <h5>账户安全</h5>
+        {% if pwd > 10 %}
+            <strong>高</strong>
+            <span>
+                <p style=" width:80%"></p>
+            </span>
+        {% elif pwd < 10 and pwd > 6 %}
+            <strong>中</strong>
+            <span>
+                <p style=" width:50%"></p>
+            </span>
+        {% else %}
+            <strong>低</strong>
+            <span>
+                <p style=" width:30%"></p>
+            </span>
+        {% endif %}
+        <a href="#" onclick="location.href='secure'">安全等级提升</a>
+    </div>
+    <!--详细列表-->
+    <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="liefyu">
+        	<h2>交易管理</h2>
+                <div class="conb">
+                <a href="#" onclick="location.href='cart'">我的购物车</a>
+                <a href="#" onclick="location.href='shop_cang'">我的收藏</a>
+                <a href="#">交易评价/晒单</a>
+                </div>
+            <h2>客户服务</h2>
+                <div class="conb">
+                <a href="#">退款及退货</a>
+                <a href="#">交易投诉</a>
+                <a href="#">商品咨询</a>
+                </div>
+            <h2>资料管理</h2>
+                <div class="conb">
+                <a href="#">账户信息</a>
+                <a href="#" onclick="location.href='secure'">账户安全</a>
+                </div>
+        </div>
+        <script type="text/javascript">
+		$(function(){//第一步都得写这个
+			$(".liefyu h2").click(function(){//获取title，并且让他执行下面的函数
+			$(this)/*点哪个就是哪个*/.next(".conb")/*哪个标题下面的con*/.slideToggle()/*打开/折叠*/.siblings/*锁定同级元素*/(".con").slideUp()/*同级元素折叠起来*/
+			})
+		})
+		</script>
+        <!--right-->
+        <div class="zuirifip">
+        	<!--商品收藏和店铺收藏-->
+            <div class="locfre">
+            	<a href="#" onclick="location.href='shop_cang'">商品收藏</a>
+                <a href="#" class="zuliyesi">店铺收藏</a>
+                <a href="#" style=" float:right" onclick="del_all()">全部删除</a>
+            </div>
+            <script>
+			$(function(){
+				$(".locfre a").click(function(){
+					$(this).addClass("zuliyesi").siblings().removeClass("zuliyesi")
+					})
+				})
+            </script>
+            <!--收藏的商品列表-->
+            <div class="nanmeizhou">
+            	<!--一条列表开始-->
+                <ul>
+                    {% for foo in shuju %}
+                        <li>
+                            <a href="#" onclick="location.href='store?store_name='+'{{ foo.3 }}'"><img src="{{ foo.1 }}"/></a>
+                            <a href="#" onclick="location.href='store?store_name='+'{{ foo.3 }}'" style=" display:block; padding-left:20px; line-height:60px; font-size:14px; float:left">{{ foo.3 }}</a>
+                            <em style=" float:left; padding-left:20px; font-size:12px; color:#666; line-height:60px">收藏时间：<s>{{ foo.4 }}</s></em>
+                            <a href="#" style=" display:block; padding-right:20px; line-height:60px; font-size:14px; float:right; text-decoration:none" onclick="del('{{ foo.3 }}')">[删除]</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <!--一条列表结束-->
+            </div>
+            <!--收藏商品列表结束-->
+        </div>
+        <!--right结束-->
+    </div>
+    <!--详细列表结束-->
+</div>
+<!--个人中心结束-->
+</body>
+</html>

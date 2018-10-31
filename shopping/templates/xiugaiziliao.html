@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>修改资料</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/vipcenter.css">
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/jquery.min_sign.js"></script>
+    <script src="../static/js/city.js/cityJson.js"></script>
+    <script src="../static/js/city.js/citySet.js"></script>
+    <script src="../static/js/city.js/Popt.js"></script>
+</head>
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="#" onclick="location.href='index?name={{ name }}'">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <li><a href="#" onclick="location.href='vip?name='+'{{ name }}'">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="#">登录<br/>登录</a></li>
+                <li><a href="#">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+        <div class="dy9">
+            <img src="../static/img/二维码.png"/>
+        </div>
+    </div>
+</div>
+<!--个人中心首页 -->
+<div class="thetoubu">
+	<!--头部-->
+	<div class="thetoubu1">
+    	<b>
+        	<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1781615267,834481015&fm=27&gp=0.jpg"/>
+        </b>
+        <em>{{ name }}</em>
+        <em>欢迎来到会员中心</em>
+        <a href="#">修改资料</a>
+        <h5>账户安全</h5>
+        {% if pwd > 10 %}
+            <strong>高</strong>
+            <span>
+                <p style=" width:80%"></p>
+            </span>
+        {% elif pwd < 10 and pwd > 6 %}
+            <strong>中</strong>
+            <span>
+                <p style=" width:50%"></p>
+            </span>
+        {% else %}
+            <strong>低</strong>
+            <span>
+                <p style=" width:30%"></p>
+            </span>
+        {% endif %}
+        <a href="#" onclick="location.href='secure'">安全等级提升</a>
+    </div>
+    <!--详细列表-->
+    <div class="xiangxilbnm">
+    	<!--left-->
+        <div class="liefyu">
+        	<h2>交易管理</h2>
+            <div class="conb">
+                <a href="#" onclick="location.href='cart'">我的购物车</a>
+                <a href="#" onclick="location.href='shop_cang'">我的收藏</a>
+                <a href="#">交易评价/晒单</a>
+            </div>
+            <h2>客户服务</h2>
+            <div class="conb">
+                <a href="#">退款及退货</a>
+                <a href="#">交易投诉</a>
+                <a href="#">商品咨询</a>
+            </div>
+            <h2>资料管理</h2>
+            <div class="conb">
+                <a href="#">账户信息</a>
+                <a href="#" onclick="location.href='secure'">账户安全</a>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function(){//第一步都得写这个
+                $(".liefyu h2").click(function(){//获取title，并且让他执行下面的函数
+                $(this)/*点哪个就是哪个*/.next(".conb")/*哪个标题下面的con*/.slideToggle()/*打开/折叠*/.siblings/*锁定同级元素*/(".con").slideUp()/*同级元素折叠起来*/
+                })
+            });
+            //判断日期格式是否正确
+            function IsDate(mystring) {
+				var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+				var str = mystring;
+				var arr = reg.exec(str);
+				var flag = true;
+				if (str=="") {
+				    alert("请输入生日");
+				    flag = false;
+                }
+                if(RegExp.$2>12||RegExp.$3>31){
+				    alert("月份或日期错误")
+                    flag = false;
+                }
+				if (!reg.test(str) ){
+                    alert("输入的日期格式为yyyy-mm-dd!");
+                    flag = false;
+				}
+				return flag;
+			}
+            function update() {
+                // 获取输入的姓名，生日，地址
+                var name = document.getElementById("real_name").value;
+                var sex  = $('input[name="sex"]:checked').val();
+                var birthday = document.getElementById("birthday").value;
+                var add1 = document.getElementById("city").value;
+                var add2 = document.getElementById("address").value;
+                var address = add1+add2;
+                var flag = IsDate(birthday);
+                if(name==""||birthday==""||add1==""||add2==""||flag==false){
+                    alert("请完善信息");
+                }else{
+                    $.ajax({
+                        type:"get",
+                        dataType:"json",
+                        url:"amend_vip?real_name="+name+"&sex="+sex+"&birthday="+birthday+"&adderss="+address,
+                        success:function (data) {
+                            //删除成功后再返回此页面
+                            location.href="vip_amend"
+                        },
+                        error:function(){
+                            alert("异常");
+                        }
+                    });
+                }
+            }
+		</script>
+        <!--right-->
+        <div class="zuirifip">
+        	<!--基本信息-->
+            <div class="basedexinxi">
+            	<a href="#">基本信息</a>
+            </div>
+            <!--基本信息结束-->
+            <!--修改基本信息开始-->
+            <div class="baseopxg">
+                <!--第二部分-->
+                <div class="thetwobf">
+                	<em>真实姓名：</em><input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px" id="real_name" type="text" class="shuru" placeholder="{{ personal.0.5 }}" required />
+                </div>
+                <!--这里减去昵称-->
+                <div class="thetwobf">
+                	<em>性别：</em>
+                    <input type="radio" name="sex" checked="ture" style=" float:left; display:block; width:13px; height:13px; margin-top:9px" value="男"><span>男</span>
+                    <input type="radio" name="sex" style=" float:left; display:block; width:13px; height:13px; margin-top:9px" value="女"><span>女</span>
+                </div>
+                <div class="thetwobf">
+                	<em>出生日期：</em><input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px; width:160px" id="birthday" type="text" class="shuru" placeholder="{{ personal.0.7 }}" required />
+                </div>
+                <div class="thetwobf">
+                	<em>居住地址：</em><input type="text" id="city" value="点击选择地区" style=" height:28px; font-size:12px; border:1px solid #bbb; float:left" required>
+                    <script type="text/javascript">
+						$("#city").click(function (e) {
+						    SelCity(this,e);
+						});
+					</script>
+                    <em style=" width:60px">街道：</em>
+                    <input style="float:left; border:1px solid #bbb; box-shadow:none; height:28px; font-size:12px; text-indent:6px; width:420px" type="text" class="shuru" id="address" placeholder="{{ personal.0.6 }}" required />
+                </div>
+                <div class="thetwobf">
+                	<a href="#" style=" display:block; padding-left:20px; padding-right:20px; line-height:40px;float:left; font-size:14px; color:#FFF; margin-left:213px" onclick="update()">保存</a>
+                </div>
+            </div>
+            <!--修改基本信息结束-->
+        </div>
+        <!--right结束-->
+    </div>
+    <!--详细列表结束-->
+</div>
+<!--个人中心结束-->
+</body>
+</html>        
+                
+                       
+             
+            

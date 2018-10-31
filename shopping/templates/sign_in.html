@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- 重置文件 -->
+  <link rel="stylesheet" href="../static/css/normalize.css">
+  <link rel="stylesheet" href="../static/css/style_sign.css">
+  <title>用户注册</title>
+</head>
+<body>
+  <div class="reg_div">
+      <form action="" method="post" id="form1">
+          {% csrf_token %}
+          <p>新用户注册</p>
+          <ul class="reg_ul">
+              <li>
+                  <span>用户名：</span>
+                  <input type="text" id="name" name="name" value="" placeholder="3-8位用户名" class="reg_user">
+                  <span class="tip user_hint"></span>
+              </li>
+              <li>
+                  <span>密码：</span>
+                  <input type="password" id="pwd" name="pwd" value="" placeholder="6-16位密码" class="reg_password">
+                  <span class="tip password_hint"></span>
+              </li>
+              <li>
+                  <span>确认密码：</span>
+                  <input type="password" name="" value="" placeholder="确认密码" class="reg_confirm">
+                  <span class="tip confirm_hint"></span>
+              </li>
+              <li>
+                  <span>邮箱：</span>
+                  <input type="text" id="e_mail" name="mail" value="" placeholder="邮箱" class="reg_email">
+                  <span class="tip email_hint"></span>
+              </li>
+              <li>
+                  <span>手机号码：</span>
+                  <input type="email" id="phone" name="phone" value="" placeholder="手机号" class="reg_mobile">
+                  <span class="tip mobile_hint"></span>
+              </li>
+              <li>
+                  <button type="submit" class="red_button">注册</button>
+              </li>
+          </ul>
+              <p>
+                  <a href="index" style="font-size: 16px;">商城首页</a>
+              </p>
+      </form>
+  </div>
+  
+ <!--jquery.min.js是JS的一个框架。如果你这个页面没有用到jquery的话，可以删掉，如果用到的话，就不可以删掉。-->
+  <script type="text/javascript" src="../static/js/jquery.min_sign.js"></script>
+  <script type="text/javascript" src="../static/js/script_sign.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>进入店铺详情</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/top.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/lunbo.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/dianpu.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/footer.css"/>
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <script src="../static/js/public.js"></script>
+</head>
+
+<body>
+<!--头部-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="index">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+            {% if name %}
+                <!--用户登录后显示用户名，点击用户名则会进入到用户中心-->
+                <li><a href="#" onclick="location.href='vip?name='+'{{ name }}'" id="username">{{ name }}<br/>{{ name }}</a></li>
+                <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+                <li><a href="login">登录<br/>登录</a></li>
+                <li><a href="sign">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/phone.png"/>
+         </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function chazhao() {
+        var shop_name = document.getElementById("shop_name").value;
+        //把搜索的商品名传过去
+        location.href="search?shop_name="+shop_name;
+    }
+    //删除店铺收藏
+    function del_store() {
+        var flag = confirm("确定删除收藏？");
+        var store = '{{ store_name }}';
+        if (flag){
+            $.ajax({
+                type:"get",
+                dataType:"json",
+                url:"Dstore?store="+store,
+                success:function (data) {
+                    alert("已取消收藏！");
+                    location.href="store?store_name="+store
+                },
+                error:function(){
+                    alert("异常");
+                }
+            });
+        }
+    }
+    //收藏店铺
+    function add_store() {
+        var name = '{{ name }}';
+        if ( name == "None"||name == ""){
+            alert("请先登录！" );
+        }else{
+            //创建时间对象，获取年月日
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDay();
+            //日期,总价格
+            var time = year+"-"+month+"-"+day;
+            var store = '{{ store_name }}';
+            $.ajax({
+                type:"get",
+                dataType:"json",
+                url:"add_store?store="+store+"&time="+time,
+                success:function (data) {
+                    alert("已收藏店铺！");
+                    location.href="store?store_name="+store
+                },
+                error:function(){
+                    alert("异常");
+                }
+            });
+        }
+    }
+</script>
+<!--logo加时间加搜索框-->
+<div class="dy10">
+	<div class="dy11">
+    	<img src="../static/img/logo2.png"/>
+    </div>
+    <div class="dy13">
+    	<embed src="../static/img/honehone_clock_wh.swf" style=" height:45px; width:120px"></embed>
+    </div>
+    <div class="dy12">
+    	<input type="text" placeholder="搜索商品/店铺" id="shop_name" style="width:500px; height:36px; text-indent:12px; font-size:12px; color:#666; float:left">
+        <input type="button" onclick="chazhao()" value="搜索" style=" cursor:pointer; width:70px; height:36px; float:right; text-align:center; background:#333;" class="shousuo">
+    </div>
+</div>
+<!--正式开始-->
+<div class="dianpugo">
+	<img src="../static/img/05206189042594699.jpg" style=" position:absolute; top:0; left:0">
+    <div class="dianpuqu">
+        <!--显示店铺的名字-->
+    	<a href="#">{{ store_name }}<br/>{{ store_name }}</a>
+        <a href="#" title="您需要添加对方好友">在线客服<br/>在线客服</a>
+        {% if details1 %}
+            <a href="#" onclick="del_store()">已收藏<br/>已收藏</a>
+        {% else %}
+            <a href="#" onclick="add_store()">收藏店铺<br/>收藏店铺</a>
+        {% endif %}
+        <span id="dfly">4.1
+        	<p>
+            	<em style=" width:80%; background:url(../static/img/2014grate.png) no-repeat 0 -5px"></em>
+            </p>
+        </span>
+    </div>
+	<!--得分来源-->
+				<div class="defenlaiyuan" style=" background:rgba(255,255,255,0.8) url(../static/img/tmao.png) no-repeat bottom center">
+    				<span style=" display:block; width:100%; line-height:40px; padding-left:20px; font-size:14px; color:#111">店铺动态评分</span>
+                    <span style=" display:block; width:100%; line-height:40px; padding-left:20px; font-size:14px; color:#999">描述相符：<s style="color:#111">4.1</s>分</span>
+                    <span style=" display:block; width:100%; line-height:40px; padding-left:20px; font-size:14px; color:#999">服务态度：<s style="color:#111">4.1</s>分</span>
+                    <span style=" display:block; width:100%; line-height:40px; padding-left:20px; font-size:14px; color:#111">公司所在地：<s>济南</s></span>
+                    <span style=" display:block; width:100%; line-height:40px; padding-left:20px; font-size:14px; color:#111">公司名称：<s>小白科技</s></span>
+    			</div>
+    <!--得分来源之后-->
+    <script>
+	$(function(){
+		$("#dfly").mouseenter(function(){
+			$(".defenlaiyuan").stop().animate({left:10},500)
+			})
+		$("#dfly").mouseleave(function(){
+			$(".defenlaiyuan").stop().animate({left:-220},500)
+			})
+		})
+    </script>
+</div>
+
+<!--下面-->
+<div class="caomeiwei">
+	<h5>全部商品</h5>
+    <script type="text/javascript">
+        function xiao() {
+            var shop_name = document.getElementById("shop").value;
+            //把搜索的商品名传过去,加上店铺的名字 details.0.2 是店铺在数据库中的位置
+            location.href="find?shop_name="+shop_name+"&store_name="+'{{ details.0.2 }}';
+        }
+        function sou() {
+            var shop_name = document.getElementById("shop").value;
+            if(shop_name==""){
+                shop_name = "{{ shop_name }}";
+            }
+            location.href="store_price?shop_name="+shop_name+"&store_name="+"{{ details.0.2 }}"
+        }
+        function sou1() {
+            var shop_name = document.getElementById("shop").value;
+            if(shop_name==""){
+                shop_name = "{{ shop_name }}";
+            }
+            location.href="store_sales?shop_name="+shop_name+"&store_name="+"{{ details.0.2 }}"
+        }
+        function sou2() {
+            var shop_name = document.getElementById("shop").value;
+            if(shop_name==""){
+                shop_name = "{{ shop_name }}";
+            }
+            location.href="store_collect?shop_name="+shop_name+"&store_name="+"{{ details.0.2 }}"
+        }
+    </script>
+    <!--商品分类-->
+    <div class="juziwei">
+        <a href="#" title="销售价格降序排列" onclick="sou()">价格<br/>价格</a>
+        <a href="#" title="七日内销量降序排列" onclick="sou1()">销量<br/>销量</a>
+        <a href="#" title="收藏人气降序排列" onclick="sou2()">收藏<br/>收藏</a>
+        <input type="button" value="搜索" onclick="xiao()"  style=" width:50px; height:22px; border:1px solid #d93600; font-size:12px; float:right; margin-top:6px; margin-right:10px; margin-left:2px; color:#fff; background:#d93600">
+        <input id="shop" type="text" placeholder="搜索店内的商品" style=" width:120px; height:20px; border:1px solid #bbb; font-size:12px; margin-top:6px; color:#666; text-indent:6px; float:right" >
+    </div>
+    <!--所有分类-->
+    <div class="yansuan">
+    	<ul>
+            {% for foo in details %}
+                <li>
+                    <a href="#" onclick="location.href='Xiangq?id='+'{{ foo.1 }}'+'&name='+'{{ name }}'">
+                        <img src="{{ foo.7 }}"/>
+                    </a>
+                    <a href="#"><i>{{ foo.3 }}</i></a>
+                    <span>￥<s style="color:#F60">{{ foo.4 }}</s></span>
+                    <p>已售:<s style="color:#111">{{ foo.10 }}</s>件</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
+

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>列表页</title>
+<link rel="stylesheet" type="text/css" href="../static/css/top.css"/>
+<link rel="stylesheet" type="text/css" href="../static/css/lunbo.css">
+<link rel="stylesheet" type="text/css" href="../static/css/liebiao.css"/>
+<link rel="stylesheet" type="text/css" href="../static/css/footer.css"/>
+<script src="../static/js/jquery-1.8.3.min.js"></script>
+<script src="../static/js/public.js"></script>
+</head>
+<!--此页面完成的是用户查询后返回的查询列表-->
+<body>
+<!--顶部菜单有改动与首页的不一样，请单独调用-->
+<div class="dy1">
+	<div class="dy2">
+        <ul class="dy3">
+            <li><a href="index">小白首页<br/>小白首页</a></li>
+            <li><a href="#" id="diyunapp">商城APP<br/>商城APP</a></li>
+        </ul>
+        <ul class="dy4">
+           {% if name %}
+               <!--用户登录后显示用户名，点击用户名则会进入到用户中心-->
+               <li><a href="#" onclick="location.href='vip?name='+'{{ name }}'" id="username">{{ name }}<br/>{{ name }}</a></li>
+               <li><a href="#" onclick="location.href='log_out'" id="username">退出登录<br/>退出登录</a></li>
+            {% else %}
+               <li><a href="login">登录<br/>登录</a></li>
+               <li><a href="sign">注册<br/>注册</a></li>
+            {% endif %}
+        </ul>
+         <div class="dy9">
+         	<img src="../static/img/二维码.png"/>
+         </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function sou() {
+        var shop_name = document.getElementById("shop_name").value;
+        //把搜索的商品名传过去
+        if (shop_name==""){
+            shop_name = "{{ shop_name }}"
+        }
+        location.href="search?shop_name="+shop_name+"&kind="+"{{ kind }}";
+    }
+    //销量的降序
+    function sou1() {
+        var shop_name = document.getElementById("shop_name").value;
+        //把搜索的商品名传过去
+        if(shop_name==""){
+            shop_name = "{{ shop_name }}"
+        }
+        location.href="sales?shop_name="+shop_name+"&kind="+"{{ kind }}";
+    }
+    //价格的降序
+    function sou2() {
+        var shop_name = document.getElementById("shop_name").value;
+        //把搜索的商品名传过去
+        if(shop_name==""){
+            shop_name = "{{ shop_name }}"
+        }
+        location.href="prices?shop_name="+shop_name+"&kind="+"{{ kind }}";
+    }
+    //按照电脑分类
+    function kind(kind) {
+        var shop_name = document.getElementById("shop_name").value;
+        //把搜索的商品名传过去
+        if (shop_name == "") {
+            shop_name = "{{ shop_name }}"
+        }
+        if (kind == 1) {
+            location.href = "search_kind?shop_name=" + shop_name + "&kind=" + kind;
+        } else if (kind == 3) {
+            location.href = "search_kind?shop_name=" + shop_name + "&kind=" + kind;
+        } else if (kind == 5) {
+            location.href = "search_kind?shop_name=" + shop_name + "&kind=" + kind;
+        } else if (kind == 4) {
+            location.href = "search_kind?shop_name=" + shop_name + "&kind=" + kind;
+        }else if (kind == 2) {
+            location.href = "search_kind?shop_name=" + shop_name + "&kind=" + kind;
+        }
+    }
+</script>
+<input id="kind" hidden="hidden" value="">
+<!--logo加时间加搜索框-->
+<div class="dy10">
+	<div class="dy11">
+    	<img src="../static/img/logo2.png"/>
+    </div>
+    <div class="dy13">
+    	<embed src="../static/img/honehone_clock_wh.swf" style=" height:45px; width:120px"></embed>
+    </div>
+    <div class="dy12">
+    	<input type="text" id="shop_name" placeholder="搜索商品/店铺" style="width:500px; height:36px; text-indent:12px; font-size:12px; color:#666; float:left" >
+        <input type="button" value="搜索" onclick="sou()" style=" cursor:pointer; width:70px; height:36px; float:right; text-align:center; background:#333;" class="shousuo">
+    </div>
+</div>
+<div class="qbspfl">
+	<div class="djfl">
+    	全部商品分类
+    </div>
+    <div class="morelist">
+    	<a href="#" onclick="kind(1)">电脑</a>
+        <a href="#" onclick="kind(3)">平板</a>
+        <a href="#" onclick="kind(5)">硬件</a>
+        <a href="#" onclick="kind(2)">手机</a>
+        <a href="#" onclick="kind(4)">配件</a>
+    </div>
+</div>
+<!--分类搜索-->
+<div class="zhxlxp">
+	<span style=" background:#000; color:#fff; margin-left:0;">排序方式</span>
+	<a href="#">综合</a>
+    <!--点击销量，如果没有被分类则显示所有的数据，如果被分类则显示分类后的商品销量-->
+    <a href="#" title="7天销量降序排列" onclick="sou1()">销量</a>
+    <a href="#" title="销售价格降序排列" onclick="sou2()">价格</a>
+</div>
+<!--商品列表-->
+<div class="shopliebiao">
+	<ul>
+        {% for shop in data %}
+            <li>
+               <a href="#" onclick="location.href='Xiangq?id='+{{ shop.1 }}" class="wocici">
+                   <b>
+                       <img src="{{ shop.7 }}"/>
+                   </b>
+                       <span>{{ shop.4 }}元</span>
+                   <p>{{ shop.3 }}</p>
+               </a>
+               <em class="wocaca">
+                   <a href="#" onclick="location.href='store?store_name='+'{{ shop.2 }}'">{{ shop.2 }}</a>
+                   <a href="#" style=" border-right:hidden">联系卖家</a>
+               </em>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!--猜你喜欢,看的人数比较多的商品-->
+<div class="zhxlxp"><span style=" background:#111; color:#fff; margin-left:0; padding-left:10px">热销商品</span></div>
+<div class="tuijiansp">
+    <div class="shopliebiao">
+        <ul>
+            {% for foo in data1 %}
+                <li>
+                    <a href="#" onclick="location.href='Xiangq?id='+{{ foo.1 }}" class="wocici">
+                        <b>
+                            <img src="{{ foo.7 }}"/>
+                        </b>
+                        <span>{{ foo.4 }}元</span>
+                        <p>{{ foo.3 }}</p>
+                    </a>
+                    <em class="wocaca">
+                        <a href="#" onclick="location.href='store?store_name='+'{{ foo.2 }}'">{{ foo.2 }}</a>
+                        <a href="#" style=" border-right:hidden">联系卖家</a>
+                    </em>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<!--页脚-->
+<!--footer-->
+<div class="footer">
+	<div class="box" style=" width:1226px; margin:0 auto">
+        <ul class="lian">
+            <li>
+                <p><img src="../static/img/fot.png">新手指南</p>
+                <a href="#">账户注册</a>
+                <a href="#">购物流程</a>
+                <a href="#">网站地图</a>
+            </li>
+            <li>
+                <p><img src="../static/img/fot1.png">支付方式</p>
+                <a href="#">货到付款</a>
+                <a href="#">在线支付</a>
+                <a href="#">礼品卡及账户余额</a>
+                <a href="#">其他支付方式</a>
+            </li>
+            <li>
+                <p><img src="../static/img/fot2.png">配送说明</p>
+                <a href="#">配送运费</a>
+                <a href="#">配送时间</a>
+            </li>
+            <li>
+                <p><img src="../static/img/fot3.png">售后服务</p>
+                <a href="#">退换货政策</a>
+                <a href="#">退换货办理流程</a>
+                <a href="#">退换货网上办理</a>
+                <a href="#">退款说明</a>
+            </li>
+            <li>
+                <p><img src="../static/img/fot4.png">关于我们</p>
+                <a href="#">公司简介</a>
+                <a href="#">合作专区</a>
+                <a href="#">联系我们</a>
+                <a href="#">友情链接</a>
+            </li>
+            <li>
+                <p><img src="../static/img/fot5.png">帮助中心</p>
+                <a href="#">找回密码</a>
+                <a href="#">邮件订阅</a>
+                <a href="#">产品册订阅</a>
+                <a href="#">隐私声明</a>
+            </li>
+        </ul>
+        <ul class="adv">
+        	<li><img src="../static/img/adv.png">正品保障</li>
+            <li><img src="../static/img/adv1.png">免运费</li>
+            <li><img src="../static/img/adv2.png">送货上门</li>
+            <li style="border-right:none;"><img src="../static/img/adv3.png">实物拍摄</li>
+        </ul>
+        <p class="ad">地址：山东省济南市天桥区历山北路黄台电子商务产业园1020室 &nbsp;&nbsp;&nbsp;邮箱：xgm@8and9.com.cn &nbsp;&nbsp;&nbsp;邮编:210008 &nbsp;&nbsp;&nbsp;电话:025-83218155</p>
+        <p class="ad">Copyright © 2010 - 2013, 版权所有 SHUIGUO.COM &nbsp;&nbsp;&nbsp;苏ICP备10088888号-1</p>
+    </div>
+</div>
+
+</body>
+</html>    
