@@ -1,1 +1,1 @@
-pay.pyΪ֧����֧���ӿڴ��룬python3�汾����ʵ�֣�crypto�İ���untitled����ȡ�Ա����ݵ��������
+﻿pay.py为支付宝支付接口代码，python3版本才能实现，crypto的包，untitled是爬取淘宝数据的爬虫代码，shopping_test.sql是使用过的数据库语句。
